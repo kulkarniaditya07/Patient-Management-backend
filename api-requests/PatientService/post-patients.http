@@ -1,0 +1,12 @@
+
+POST http://localhost:8081/api/patients
+Content-Type: application/json
+
+{
+  "name": "Jane Tiger",
+  "email": "",
+  "address": "789 Willow St, Springfield",
+  "dateOfBirth": "1969-10-17",
+  "registeredDate": "2025-03-29"
+}
+
