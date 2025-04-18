@@ -24,7 +24,7 @@ public class Patient {
     private UUID id;
 
     @NotNull
-    @NotBlank()
+    @NotBlank
     private String name;
 
     @NotBlank

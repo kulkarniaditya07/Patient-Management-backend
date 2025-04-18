@@ -1,5 +1,6 @@
 package com.pm.patientservice.service.impl;
 
+import com.pm.patientservice.exception.ResourceExistsException;
 import com.pm.patientservice.model.Patient;
 import com.pm.patientservice.payload.PatientDTO;
 import com.pm.patientservice.payload.PatientResponse;
@@ -7,6 +8,7 @@ import com.pm.patientservice.repository.PatientRepository;
 import com.pm.patientservice.service.PatientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +41,9 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public PatientDTO createPatient(PatientDTO patientDTO) {
         Patient patient = modelMapper.map(patientDTO, Patient.class);
+        if(patientRepository.existsByEmail(patient.getEmail())){
+            throw new ResourceExistsException("Email already exists");
+        }
         Patient savedPatient = patientRepository.save(patient);
 
         return modelMapper.map(savedPatient, PatientDTO.class);

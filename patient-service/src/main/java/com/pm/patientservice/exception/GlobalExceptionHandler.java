@@ -1,5 +1,6 @@
 package com.pm.patientservice.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,4 +22,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
+
+    @ExceptionHandler(ResourceExistsException.class)
+    public ResponseEntity<APIResponse> handleResourceExistsException(ResourceExistsException ex) {
+        String message = ex.getMessage();
+        APIResponse apiResponse = new APIResponse(message, false);
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(apiResponse);
+    }
 }
