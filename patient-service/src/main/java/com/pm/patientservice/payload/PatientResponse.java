@@ -10,5 +10,5 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class PatientResponse {
-    private List<PatientDTO> content;
+    private List<PatientDTO> contents;
 }
