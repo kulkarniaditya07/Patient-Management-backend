@@ -1,6 +1,7 @@
 package com.pm.patientservice.exception;
 
-import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +12,8 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
@@ -23,10 +26,19 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(ResourceExistsException.class)
-    public ResponseEntity<APIResponse> handleResourceExistsException(ResourceExistsException ex) {
-        String message = ex.getMessage();
-        APIResponse apiResponse = new APIResponse(message, false);
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(apiResponse);
+    @ExceptionHandler(EmailExistsException.class)
+    public ResponseEntity<Map<String, String>> handleEmailExistsException(EmailExistsException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message","Email already exists");
+        return ResponseEntity.badRequest().body(errors);
+    }
+
+
+    @ExceptionHandler(PatientNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handlePatientNotFoundException(PatientNotFoundException ex) {
+        logger.warn("Patient not found {}", ex.message);
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message","Patient not found");
+        return ResponseEntity.badRequest().body(errors);
     }
 }

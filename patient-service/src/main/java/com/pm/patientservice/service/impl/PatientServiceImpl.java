@@ -1,14 +1,14 @@
 package com.pm.patientservice.service.impl;
 
-import com.pm.patientservice.exception.ResourceExistsException;
+import com.pm.patientservice.exception.EmailExistsException;
+import com.pm.patientservice.exception.PatientNotFoundException;
 import com.pm.patientservice.model.Patient;
 import com.pm.patientservice.payload.PatientDTO;
 import com.pm.patientservice.payload.PatientResponse;
+import com.pm.patientservice.payload.UpdatePatientDTO;
 import com.pm.patientservice.repository.PatientRepository;
 import com.pm.patientservice.service.PatientService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,19 +34,39 @@ public class PatientServiceImpl implements PatientService {
                 .map(patient -> modelMapper.map(patient, PatientDTO.class))
                 .toList();
         return PatientResponse.builder()
-                .content(patientDTOs)
+                .contents(patientDTOs)
                 .build();
     }
 
     @Override
     public PatientDTO createPatient(PatientDTO patientDTO) {
-        Patient patient = modelMapper.map(patientDTO, Patient.class);
-        if(patientRepository.existsByEmail(patient.getEmail())){
-            throw new ResourceExistsException("Email already exists");
+
+        if(patientRepository.existsByEmail(patientDTO.getEmail())){
+            throw new EmailExistsException();
         }
+
+        Patient patient = modelMapper.map(patientDTO, Patient.class);
+
         Patient savedPatient = patientRepository.save(patient);
 
         return modelMapper.map(savedPatient, PatientDTO.class);
+    }
+
+    @Override
+    public UpdatePatientDTO updatePatient(Long patientId, UpdatePatientDTO patientDTO) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(PatientNotFoundException::new);
+        modelMapper.map(patientDTO, patient);
+        Patient updatedPatient = patientRepository.save(patient);
+        return modelMapper.map(updatedPatient, UpdatePatientDTO.class);
+    }
+
+    @Override
+    public PatientDTO deletePatient(Long patientId) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(PatientNotFoundException::new);
+        patientRepository.delete(patient);
+        return modelMapper.map(patient, PatientDTO.class);
     }
 
 

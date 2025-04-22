@@ -6,15 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
-
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class PatientDTO{
-
-
+@AllArgsConstructor
+public class UpdatePatientDTO {
     @NotNull
     @NotBlank(message = "please provide name")
     private String name;
@@ -28,11 +26,6 @@ public class PatientDTO{
     @NotBlank(message = "Please provide address")
     private String address;
 
-    @NotNull(message = "Please provide date of birth")
+    @NotNull
     private LocalDate dateOfBirth;
-
-    @NotNull(message = "Please provide registered date")
-    private LocalDate registeredDate;
-
-
 }

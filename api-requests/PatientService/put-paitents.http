@@ -1,0 +1,11 @@
+
+PUT http://localhost:8081/api/patients/1
+Content-Type: application/json
+
+{
+  "name": "Jane Tiger",
+  "email": "verygoodemail@gmail.com",
+  "address": "722 Willow St, Springfield",
+  "dateOfBirth": "1969-10-17",
+  "registeredDate": "2024-05-12"
+}
