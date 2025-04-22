@@ -1,4 +1,4 @@
 ### GET request from postgres which is on docker
-GET http://localhost:8081/api/patients
+GET http://localhost:4000/api/patients
 
 ###
